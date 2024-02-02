@@ -10,28 +10,34 @@ const createPerson3b = readline.createInterface({
     output: process.stdout
 });
 
-createPerson3b.question("Introduce tu nombre: ", (name) => {
-    createPerson3b.question("Introduce tu apellido: ", (surname) => {
-        createPerson3b.question("Introduce tu edad: ", (age) => {
-            const person3b = {
-                name: name,
-                surname: surname,
-                age: age
-            };
 
-            async function asAw() {
-                try {
-                    await fs.writeFile("person3b.json", JSON.stringify(person3b));
-                    const resultPerson = await fs.readFile("person3b.json");
-                    console.log("Los datos de person3b han sido guardados en person3b.json");
-                    console.log(JSON.parse(resultPerson));
-                } catch (err) {
-                    console.log(err)
-                }
-            }
-            asAw();
+async function asAw() {
+    try {
+        const name = await questionAsync("Introduce tu nombre: ");
+        const surname = await questionAsync("Introduce tu apellido: ");
+        const age = await questionAsync("Introduce tu edad: ");
 
-            createPerson3b.close();
-        });
+        const person3b = {
+            name: name,
+            surname: surname,
+            age: age
+        };
+
+        await fs.writeFile("person3b.json", JSON.stringify(person3b));
+        const resultPerson = await fs.readFile("person3b.json");
+        console.log("Los datos de person3b han sido guardados en person3b.json");
+        console.log(JSON.parse(resultPerson));
+    } catch (err) {
+        console.log(err);
+    } finally {
+        createPerson3b.close();
+    }
+}
+
+asAw();
+
+function questionAsync(prompt) {
+    return new Promise((resolve) => {
+        createPerson3b.question(prompt, resolve);
     });
-});
+}
