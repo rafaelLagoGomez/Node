@@ -83,8 +83,13 @@ function updateBook(req, res) {
     if (index === -1) {
         response = { error: true, code: 200, message: `No existe ningún libro con el id: ${req.query.id_book} para modificar` }
     } else {
-        books[index] = updatedBook;
-        response = { error: false, code: 200, message: `El libro con el id: ${req.query.id_book} se ha modificado correctamente`, books }
+        if (updatedBook) {
+            books[index] = {
+                ...books[index],
+                ...req.body ?? {}
+            }
+            response = { error: false, code: 200, message: `El libro con el id: ${req.query.id_book} se ha modificado correctamente`, books }
+        } 
     }
     res.send(response)
 }
