@@ -12,7 +12,7 @@ let books = [
       type: "Belic",
       author: "Rebecca Yarros",
       price: 21.75,
-      photo: "pic1",
+      photo: "https://imagessl0.casadellibro.com/a/l/s5/90/9788408279990.webp",
     },
     {
       id_book: 2,
@@ -21,7 +21,7 @@ let books = [
       type: "Historic",
       author: "Santiago Posteguillo",
       price: 23.65,
-      photo: "pic2",
+      photo: "https://imagessl4.casadellibro.com/a/l/s5/64/9788466676564.webp",
     }
 ]
 
@@ -39,18 +39,19 @@ function getBooksOrID(req, res) {
     if (bookId) {
         const book = books.find((b) => b.id_book === parseInt(bookId));
         if (!book) {
-            response = { error: true, code: 200, message: `No existe el libro con el id: ${req.query.id_book}` }
+            response = { error: true, code: 200, message: `No existe el libro con el id: ${req.query.id_book}`, res: [] }
             res.send(response)
         }
-        response = book;
+        response = { error: true, code: 200, message: `Éxito, has encontrado el libro con el id: ${req.query.id_book}`, res: [book] }
+        
     } else {
         if (books) {
             response = books;
         } else {
-            response = { error: true, code: 200, message: "No hay ningún libro" }
+            response = { error: true, code: 200, message: "No hay ningún libro", res: [] }
             res.send(response)
         }
-        response = books;
+        response = { error: true, code: 200, message: "No hay ningún libro", res: books };
     }
     res.send(response)
 }
